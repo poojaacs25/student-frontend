@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Library Portal</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f1f5f9;
+    color: #1e293b;
+}
+
+/* HEADER */
+header {
+    background: #1e3a8a;
+    color: white;
+    padding: 22px 35px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+header h1 {
+    font-size: 25px;
+}
+
+header p {
+    margin-top: 5px;
+    color: #dbeafe;
+}
+
+.profile {
+    background: #ffffff;
+    color: #1e3a8a;
+    padding: 10px 16px;
+    border-radius: 20px;
+    font-weight: bold;
+}
+
+/* NAVIGATION */
+nav {
+    background: white;
+    padding: 15px 35px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    box-shadow: 0 2px 5px #ddd;
+}
+
+nav button {
+    background: transparent;
+    color: #1e3a8a;
+    font-weight: bold;
+}
+
+nav button.active,
+nav button:hover {
+    background: #1e3a8a;
+    color: white;
+}
+
+/* MAIN CONTAINER */
+.container {
+    max-width: 1150px;
+    margin: 30px auto;
+    padding: 20px;
+}
+
+.welcome {
+    margin-bottom: 25px;
+}
+
+.welcome h2 {
+    margin-bottom: 8px;
+    color: #1e3a8a;
+}
+
+/* STATISTICS */
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.card {
+    background: white;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px #ddd;
+}
+
+.card h3 {
+    color: #64748b;
+    font-size: 15px;
+    margin-bottom: 12px;
+}
+
+.card p {
+    font-size: 30px;
+    font-weight: bold;
+    color: #2563eb;
+}
+
+/* SECTIONS */
+.section {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 8px #ddd;
+}
+
+.section h2 {
+    margin-bottom: 20px;
+    color: #1e3a8a;
+}
+
+/* SEARCH */
+.search-box {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #cbd5e1;
+    border-radius: 7px;
+    margin-bottom: 20px;
+    font-size: 15px;
+}
+
+select {
+    padding: 11px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    margin-bottom: 18px;
+}
+
+/* BOOK CARDS */
+.book-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.book {
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 20px;
+    background: #f8fafc;
+}
+
+.book-icon {
+    font-size: 40px;
+    margin-bottom: 12px;
+}
+
+.book h3 {
+    margin-bottom: 9px;
+    color: #1e3a8a;
+}
+
+.book p {
+    margin: 7px 0;
+    font-size: 14px;
+}
+
+.available {
+    color: #15803d;
+    font-weight: bold;
+}
+
+.unavailable {
+    color: #dc2626;
+    font-weight: bold;
+}
+
+/* BUTTONS */
+button {
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    background: #2563eb;
+    color: white;
+    cursor: pointer;
+    margin: 5px 3px 0 0;
+}
+
+button:hover {
+    background: #1e40af;
+}
+
+button:disabled {
+    background: #94a3b8;
+    cursor: not-allowed;
+}
+
+.return-btn {
+    background: #16a34a;
+}
+
+.reserve-btn {
+    background: #9333ea;
+}
+
+/* TABLE */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 550px;
+}
+
+th, td {
+    padding: 13px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+th {
+    background: #dbeafe;
+}
+
+.table-scroll {
+    overflow-x: auto;
+}
+
+/* NOTIFICATIONS */
+.notification {
+    background: #eff6ff;
+    padding: 14px;
+    margin: 10px 0;
+    border-left: 4px solid #2563eb;
+    border-radius: 5px;
+}
+
+.empty {
+    color: #64748b;
+    padding: 20px 0;
+}
+
+.hidden {
+    display: none;
+}
+
+footer {
+    text-align: center;
+    padding: 22px;
+    background: #1e3a8a;
+    color: white;
+    margin-top: 30px;
+}
+
+@media(max-width: 600px) {
+    header {
+        padding: 18px;
+    }
+
+    nav {
+        padding: 12px;
+    }
+
+    .container {
+        padding: 12px;
+    }
+
+    .section {
+        padding: 16px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div>
+        <h1>📚 Student Library Portal</h1>
+        <p>Smart Library Management System</p>
+    </div>
+
+    <div class="profile">
+        👤 Student
+    </div>
+</header>
+
+<nav>
+    <button class="active" onclick="showSection('dashboard',this)">Dashboard</button>
+    <button onclick="showSection('books',this)">Search Books</button>
+    <button onclick="showSection('mybooks',this)">My Books</button>
+    <button onclick="showSection('reservations',this)">Reservations</button>
+    <button onclick="showSection('notifications',this)">Notifications</button>
+</nav>
+
+<div class="container">
+
+<!-- DASHBOARD -->
+
+<div id="dashboard" class="page">
+
+    <div class="welcome">
+        <h2>Welcome, Student! 👋</h2>
+        <p>Explore books and manage your library activities.</p>
+    </div>
+
+    <div class="cards">
+
+        <div class="card">
+            <h3>Available Books</h3>
+            <p id="availableCount">0</p>
+        </div>
+
+        <div class="card">
+            <h3>My Borrowed Books</h3>
+            <p id="borrowedCount">0</p>
+        </div>
+
+        <div class="card">
+            <h3>My Reservations</h3>
+            <p id="reservedCount">0</p>
+        </div>
+
+    </div>
+
+    <div class="section">
+        <h2>Quick Actions</h2>
+        <button onclick="showSection('books')">🔍 Search Books</button>
+        <button onclick="showSection('mybooks')">📖 View My Books</button>
+    </div>
+
+    <div class="section">
+        <h2>Recently Added Books</h2>
+        <div id="recentBooks" class="book-list"></div>
+    </div>
+
+</div>
+
+<!-- SEARCH BOOKS -->
+
+<div id="books" class="page hidden">
+
+    <div class="section">
+
+        <h2>🔍 Search Library Books</h2>
+
+        <input
+            type="text"
+            id="search"
+            class="search-box"
+            placeholder="Search by book title, author or subject..."
+        >
+
+        <div>
+            <select id="category" onchange="displayBooks()">
+                <option value="All">All Categories</option>
+                <option value="Programming">Programming</option>
+                <option value="Science">Science</option>
+                <option value="Mathematics">Mathematics</option>
+                <option value="Database">Database</option>
+            </select>
+        </div>
+
+        <div id="bookList" class="book-list"></div>
+
+    </div>
+
+</div>
+
+<!-- MY BOOKS -->
+
+<div id="mybooks" class="page hidden">
+
+    <div class="section">
+
+        <h2>📖 My Borrowed Books</h2>
+
+        <div class="table-scroll">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Book Name</th>
+                        <th>Author</th>
+                        <th>Borrow Date</th>
+                        <th>Due Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody id="borrowedList"></tbody>
+            </table>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- RESERVATIONS -->
+
+<div id="reservations" class="page hidden">
+
+    <div class="section">
+
+        <h2>📌 My Reservations</h2>
+
+        <div class="table-scroll">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Book Name</th>
+                        <th>Author</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody id="reservationList"></tbody>
+            </table>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- NOTIFICATIONS -->
+
+<div id="notifications" class="page hidden">
+
+    <div class="section">
+
+        <h2>🔔 Notifications</h2>
+
+        <div id="notificationList"></div>
+
+    </div>
+
+</div>
+
+</div>
+
+<footer>
+    Student Library Portal | Library Management System
+</footer>
+
+<script>
+
+// SAMPLE BOOK DATA
+
+let books = JSON.parse(localStorage.getItem("libraryBooks")) || [
+    {id:1, title:"Python Programming", author:"Reema Thareja", category:"Programming", total:3, available:3},
+    {id:2, title:"Java Programming", author:"Herbert Schildt", category:"Programming", total:2, available:1},
+    {id:3, title:"Database Management Systems", author:"Raghu Ramakrishnan", category:"Database", total:3, available:3},
+    {id:4, title:"Engineering Mathematics", author:"B.S. Grewal", category:"Mathematics", total:2, available:0},
+    {id:5, title:"Computer Networks", author:"Andrew Tanenbaum", category:"Science", total:2, available:2},
+    {id:6, title:"Data Structures", author:"Seymour Lipschutz", category:"Programming", total:3, available:2}
+];
+
+let borrowed = JSON.parse(localStorage.getItem("borrowedBooks")) || [];
+
+let reservations = JSON.parse(localStorage.getItem("reservations")) || [];
+
+let notifications = JSON.parse(localStorage.getItem("notifications")) || [
+    "Welcome to the Student Library Portal!"
+];
+
+// SAVE DATA
+
+function saveData() {
+    localStorage.setItem("libraryBooks", JSON.stringify(books));
+    localStorage.setItem("borrowedBooks", JSON.stringify(borrowed));
+    localStorage.setItem("reservations", JSON.stringify(reservations));
+    localStorage.setItem("notifications", JSON.stringify(notifications));
+}
+
+// NAVIGATION
+
+function showSection(id, button) {
+
+    document.querySelectorAll(".page").forEach(page => {
+        page.classList.add("hidden");
+    });
+
+    document.getElementById(id).classList.remove("hidden");
+
+    document.querySelectorAll("nav button").forEach(btn => {
+        btn.classList.remove("active");
+    });
+
+    if(button) button.classList.add("active");
+
+    if(id === "mybooks") displayBorrowed();
+    if(id === "reservations") displayReservations();
+    if(id === "notifications") displayNotifications();
+}
+
+// DASHBOARD
+
+function updateDashboard() {
+
+    document.getElementById("availableCount").textContent =
+        books.reduce((sum, book) => sum + book.available, 0);
+
+    document.getElementById("borrowedCount").textContent =
+        borrowed.length;
+
+    document.getElementById("reservedCount").textContent =
+        reservations.length;
+
+    let recent = document.getElementById("recentBooks");
+
+    recent.innerHTML = "";
+
+    books.slice(0,3).forEach(book => {
+
+        recent.innerHTML += `
+            <div class="book">
+                <div class="book-icon">📘</div>
+                <h3>${book.title}</h3>
+                <p>Author: ${book.author}</p>
+                <p class="${book.available > 0 ? 'available' : 'unavailable'}">
+                    ${book.available > 0 ? 'Available' : 'Currently Unavailable'}
+                </p>
+            </div>
+        `;
+    });
+}
+
+// DISPLAY BOOKS
+
+function displayBooks() {
+
+    let search = document.getElementById("search").value.toLowerCase();
+
+    let category = document.getElementById("category").value;
+
+    let list = document.getElementById("bookList");
+
+    list.innerHTML = "";
+
+    let filtered = books.filter(book => {
+
+        let matchesSearch =
+            book.title.toLowerCase().includes(search) ||
+            book.author.toLowerCase().includes(search) ||
+            book.category.toLowerCase().includes(search);
+
+        let matchesCategory =
+            category === "All" || book.category === category;
+
+        return matchesSearch && matchesCategory;
+    });
+
+    if(filtered.length === 0) {
+        list.innerHTML = '<p class="empty">No books found.</p>';
+        return;
+    }
+
+    filtered.forEach(book => {
+
+        let isBorrowed = borrowed.some(b => b.id === book.id);
+        let isReserved = reservations.some(r => r.id === book.id);
+
+        let action = "";
+
+        if(isBorrowed) {
+            action = '<button disabled>Already Borrowed</button>';
+        } else if(isReserved) {
+            action = '<button disabled>Already Reserved</button>';
+        } else if(book.available > 0) {
+            action = `<button onclick="borrowBook(${book.id})">Borrow Book</button>`;
+        } else {
+            action = `<button class="reserve-btn" onclick="reserveBook(${book.id})">Reserve Book</button>`;
+        }
+
+        list.innerHTML += `
+            <div class="book">
+                <div class="book-icon">📚</div>
+
+                <h3>${book.title}</h3>
+
+                <p><b>Author:</b> ${book.author}</p>
+
+                <p><b>Category:</b> ${book.category}</p>
+
+                <p><b>Copies Available:</b> ${book.available}</p>
+
+                <p class="${book.available > 0 ? 'available' : 'unavailable'}">
+                    ${book.available > 0 ? 'Available' : 'Unavailable'}
+                </p>
+
+                ${action}
+            </div>
+        `;
+    });
+}
+
+// BORROW BOOK
+
+function borrowBook(id) {
+
+    let book = books.find(b => b.id === id);
+
+    if(!book || book.available <= 0) {
+        alert("Book is not available!");
+        return;
+    }
+
+    if(borrowed.some(b => b.id === id)) {
+        alert("You already borrowed this book!");
+        return;
+    }
+
+    book.available--;
+
+    let today = new Date();
+
+    let due = new Date();
+    due.setDate(due.getDate() + 14);
+
+    borrowed.push({
+        id: book.id,
+        title: book.title,
+        author: book.author,
+        borrowDate: today.toLocaleDateString("en-IN"),
+        dueDate: due.toLocaleDateString("en-IN")
+    });
+
+    notifications.unshift("You successfully borrowed " + book.title);
+
+    saveData();
+
+    alert("Book borrowed successfully!");
+
+    refresh();
+}
+
+// RETURN BOOK
+
+function returnBook(id) {
+
+    let index = borrowed.findIndex(b => b.id === id);
+
+    if(index === -1) return;
+
+    let book = books.find(b => b.id === id);
+
+    if(book) book.available++;
+
+    let title = borrowed[index].title;
+
+    borrowed.splice(index,1);
+
+    notifications.unshift("You returned " + title);
+
+    saveData();
+
+    alert("Book returned successfully!");
+
+    refresh();
+}
+
+// RESERVE BOOK
+
+function reserveBook(id) {
+
+    let book = books.find(b => b.id === id);
+
+    if(!book || book.available > 0) {
+        alert("This book is currently available. You can borrow it.");
+        return;
+    }
+
+    if(reservations.some(r => r.id === id)) {
+        alert("You have already reserved this book!");
+        return;
+    }
+
+    reservations.push({
+        id: book.id,
+        title: book.title,
+        author: book.author,
+        status: "Waiting"
+    });
+
+    notifications.unshift("You reserved " + book.title);
+
+    saveData();
+
+    alert("Book reserved successfully!");
+
+    refresh();
+}
+
+// CANCEL RESERVATION
+
+function cancelReservation(id) {
+
+    reservations = reservations.filter(r => r.id !== id);
+
+    notifications.unshift("Reservation cancelled.");
+
+    saveData();
+
+    refresh();
+}
+
+// DISPLAY BORROWED BOOKS
+
+function displayBorrowed() {
+
+    let list = document.getElementById("borrowedList");
+
+    list.innerHTML = "";
+
+    if(borrowed.length === 0) {
+        list.innerHTML =
+            '<tr><td colspan="5">No borrowed books.</td></tr>';
+        return;
+    }
+
+    borrowed.forEach(book => {
+
+        list.innerHTML += `
+            <tr>
+                <td>${book.title}</td>
+                <td>${book.author}</td>
+                <td>${book.borrowDate}</td>
+                <td>${book.dueDate}</td>
+                <td>
+                    <button class="return-btn"
+                    onclick="returnBook(${book.id})">
+                    Return
+                    </button>
+                </td>
+            </tr>
+        `;
+    });
+}
+
+// DISPLAY RESERVATIONS
+
+function displayReservations() {
+
+    let list = document.getElementById("reservationList");
+
+    list.innerHTML = "";
+
+    if(reservations.length === 0) {
+        list.innerHTML =
+            '<tr><td colspan="4">No reservations found.</td></tr>';
+        return;
+    }
+
+    reservations.forEach(book => {
+
+        list.innerHTML += `
+            <tr>
+                <td>${book.title}</td>
+                <td>${book.author}</td>
+                <td>${book.status}</td>
+                <td>
+                    <button class="delete-btn"
+                    onclick="cancelReservation(${book.id})">
+                    Cancel
+                    </button>
+                </td>
+            </tr>
+        `;
+    });
+}
+
+// NOTIFICATIONS
+
+function displayNotifications() {
+
+    let list = document.getElementById("notificationList");
+
+    list.innerHTML = "";
+
+    if(notifications.length === 0) {
+        list.innerHTML = '<p class="empty">No notifications.</p>';
+        return;
+    }
+
+    notifications.forEach(note => {
+
+        let div = document.createElement("div");
+
+        div.className = "notification";
+
+        div.textContent = "🔔 " + note;
+
+        list.appendChild(div);
+    });
+}
+
+// REFRESH ALL DATA
+
+function refresh() {
+
+    updateDashboard();
+
+    displayBooks();
+
+    displayBorrowed();
+
+    displayReservations();
+
+    displayNotifications();
+}
+
+// SEARCH EVENT
+
+document.getElementById("search")
+    .addEventListener("input", displayBooks);
+
+// INITIAL LOAD
+
+saveData();
+
+refresh();
+
+</script>
+
+</body>
+</html>
+
